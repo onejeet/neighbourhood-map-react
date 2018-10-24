@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
-
+@import url('https://fonts.googleapis.com/css?family=Berkshire+Swash');
 
 /*
  * -------------
@@ -44,6 +44,7 @@ h1, h2, h3, h4, h5{
     overflow: hidden;
 }
 .header .logo{
+    font-family: 'Berkshire Swash', cursive;
     font-size: 30px;
     letter-spacing: 0.1em;
     color:#fff;
