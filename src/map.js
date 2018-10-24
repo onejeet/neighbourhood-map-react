@@ -85,10 +85,10 @@ class Map extends Component {
         marker.addListener('click', () => {
             this.state.map.panTo(marker.getPosition());
             this.state.informationBox.setContent(`
-            <div class="informationBox" tabIndex="3">
+            <div class="informationBox" tabIndex="1">
                 <div name=${marker.title}>
-                    <h3>${marker.title}</h3>
-                    <p>${marker.text}</p>
+                    <h3 tabIndex="0">${marker.title}</h3>
+                    <p tabIndex="0">${marker.text}</p>
                 </div>
                 </div>`);
             this.state.informationBox.open(map, marker);
@@ -146,7 +146,7 @@ class Map extends Component {
                 informationBox={this.state.informationBox}
                 toggleSidebar={this.props.toggleSidebar}
                 />
-                <div className="map-container">
+                <div className="map-container" tabIndex="-1">
                     <div id="map" role="application"/>
                 </div>
             </main>

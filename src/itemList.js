@@ -16,8 +16,8 @@ class Item extends Component{
         informationBox.setContent(
             `<div class="informationBox" tabIndex="0">
             <div name=${ marker.title }>
-                <h3>${marker.title}</h3>
-                <p>${marker.text}</p>
+                <h3 tabIndex="0">${marker.title}</h3>
+                <p tabIndex="0">${marker.text}</p>
             </div>
             </div>`
         );
