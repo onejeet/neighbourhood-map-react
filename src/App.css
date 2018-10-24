@@ -86,16 +86,13 @@ h1, h2, h3, h4, h5{
         justify-content: flex-end;
     }
     .header .logo{
-        font-size: 20px;
+        font-size: 25px;
     }
     #hamburger-icon{
         padding: 15px;
     }
 }
 @media screen and (max-width: 269px){
-    .header{
-        .display: none;
-    }
     .header .logo{
         display: none;
     }

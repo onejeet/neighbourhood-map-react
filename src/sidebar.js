@@ -8,7 +8,7 @@ class Sidebar extends Component {
         return (
             <div className="sidebar">
                 <label htmlFor="search">Enter the Mall Name</label>
-                <input id="search" tabIndex="1" aria-label="Search Malls"  placeholder="Search Malls"
+                <input id="search" tabIndex="0" aria-label="Search Malls"  placeholder="Search Malls"
                 value={this.props.query}
                 onChange={(event) => this.props.updateResult(event.target.value, map)}
                 />

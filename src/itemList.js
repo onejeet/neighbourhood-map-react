@@ -38,10 +38,11 @@ class Item extends Component{
         marker.addListener("click", function() {
             $('.location-list .active').removeClass('active');
         });
-        $('.locationList li').on('keyup',function(event) {
-            if (event.keyCode === 13) {
-                event.preventDefault();
-                this.openMarker();
+        //Add Interactivity for Enter Key to improve a11y
+        $('.location-list li').keypress(function(event) {
+            if (event.which === 13) {
+                $(event.target).click();
+                return false;
             }
         });
     }

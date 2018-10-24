@@ -7,6 +7,17 @@ class App extends Component {
     state = {
         sidebar : 'closed'
     }
+
+    componentDidMount(){
+        //Add Interactivity for Enter Key to improve a11y
+        $('#hamburger-icon').keypress(function(event) {
+            if (event.which === 13) {
+                $(event.target).click();
+                return false;
+            }
+        });
+    }
+
     toggleSidebar = () => {
         //Open and close sidebar function
         if(this.state.sidebar === 'open'){
@@ -31,7 +42,7 @@ class App extends Component {
                     <div className="bar2"></div>
                     <div className="bar3"></div>
                 </div>
-                <Map google={this.props.google} toggleSidebar={this.toggleSidebar} />
+                <Map google={this.props.google} tabIndex="-1" toggleSidebar={this.toggleSidebar} />
             </div>
         );
     }

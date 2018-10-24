@@ -19,6 +19,7 @@ class Map extends Component {
     }
 
     initMap = () => {
+        // initialising the map of Hyderabad
         const map = new window.google.maps.Map(document.getElementById('map'), {
             center: {lat: 17.3924137, lng: 78.4653866},
             zoom:11,
@@ -34,8 +35,8 @@ class Map extends Component {
         const {tips} = this.state
         this.state.allPlaces.forEach(place => {
 
-        const clientId = "SBUBZ2B234WUQ5CKSPQXFPRDMFVCGFGQ1PA25VGNLFRZTPV0";
-        const clientSecret = "HSLONZVWRKJF5TMQ2UUTA23EAO4MVINSOLD1ZCYFKXYWR2YH";
+        const clientId = "CWQ3TXXBMMD30Y5OX4O3XMW1PWD1XBAI5DQISABAH2D2RVDL";
+        const clientSecret = "IU40MZ3LYRZC1MU431LJCYO1BZDFAMJ1OZNZYCM0F3FOY35W";
         const url = `https://api.foursquare.com/v2/venues/${place.venue_id}/tips?&client_id=${clientId}&client_secret=${clientSecret}&v=20181024`
 
         //fetch data from foursquare
@@ -53,7 +54,7 @@ class Map extends Component {
             this.setState(tips);
             this.addMarker(this.state.map, tip);
         })
-    }).catch(error => alert(`Unable to retrieve data from Foursquare. Try again later.`, error));
+        }).catch(error =>alert(`Unable to retrieve data from Foursquare. Try again later.`, error));
         })
     }
 
@@ -155,7 +156,9 @@ class Map extends Component {
 
 function loadScript(url) {
     var newScript = document.createElement("script");
+    // newScript.onerror = alert('Google Map Not Loaded!');
     document.head.appendChild(newScript);
     newScript.src = url;
+    newScript.async = true;
 }
 export default Map;

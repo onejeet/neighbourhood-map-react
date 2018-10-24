@@ -44,4 +44,9 @@ export const Locations = [
         position: {lat: 17.483262, lng: 78.3913397},
         venue_id: '4ed9d9d85c5c96a2fd9907e2',
     },
+    {
+        name: 'Spencer\'s Mall',
+        position: {lat: 17.3698563, lng: 78.4263488},
+        venue_id: '50792dd6e4b0109f3532cf0e',
+    },
 ];
