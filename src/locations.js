@@ -24,4 +24,24 @@ export const Locations = [
         position: {lat: 17.4145167, lng: 78.4465899},
         venue_id: '4b645c79f964a52048ad2ae3',
     },
+    {
+        name: 'PVR Next Galleria Mall',
+        position: {lat: 17.4290096, lng: 78.4480587},
+        venue_id: '5a8af33d9fca567a057ff31c',
+    },
+    {
+        name: 'PVR Icon',
+        position: {lat: 17.4478958, lng: 78.3823586},
+        venue_id: 'ab3b4e00284ecece79',
+    },
+    {
+        name: 'SLN Terminus Mall',
+        position: {lat: 17.4523613, lng: 78.3607897},
+        venue_id: '561a76e6498e5335924cdfbb',
+    },
+    {
+        name: 'NSL Centrum Mall',
+        position: {lat: 17.483262, lng: 78.3913397},
+        venue_id: '4ed9d9d85c5c96a2fd9907e2',
+    },
 ];

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Locations } from './locations.js'
+import { Locations } from './locations.js';
+import escapeRegExp from 'escape-string-regexp';
+import Sidebar from './sidebar.js';
 
 class Map extends Component {
     state = {
@@ -86,10 +88,9 @@ class Map extends Component {
                 <div name=${marker.title}>
                     <h3>${marker.title}</h3>
                     <p>${marker.text}</p>
-                    <p>Tips provided by <a href="https://foursquare.com/">Foursquare</a></p>
                 </div>
                 </div>`);
-            this.state.informationBox.open(map, marker)
+            this.state.informationBox.open(map, marker);
         });
         //animation marker bounce on mouseover
         marker.addListener('mouseover', function() {
@@ -101,13 +102,53 @@ class Map extends Component {
     }
     }
 
+    updateResult = (query, map) => {
+        this.setState({query: query})
+        const {markers} = this.state
+        //filter markers
+        markers.forEach((marker) => {
+            if (marker.title.toLowerCase().indexOf(query.toLowerCase()) >= 0){
+                marker.setVisible(true);
+                this.state.informationBox.close(map, marker);
+            } else {
+                marker.setVisible(false);
+            }
+        });
+
+        this.setState({markers});
+    };
+
+    filterPlaces = (query, markers) => {
+        let newPlaces;
+        if (query){
+            const match = new RegExp(escapeRegExp(query),'i');
+            newPlaces = markers.filter((marker)=>match.test(marker.title))
+        }
+        else{
+          newPlaces=markers;
+        }
+        return newPlaces;
+    }
+
     render() {
+        const {query} = this.state;
+        const {markers} = this.state
+        let searchedPlaces = this.filterPlaces(query, markers);
         return (
-            <div className="container" role="main">
+            <main className="container" role="main">
+                <Sidebar
+                updateResult= {this.updateResult}
+                query={this.state.query}
+                map={this.state.map}
+                searchedPlaces={searchedPlaces}
+                marker={this.state.markers}
+                informationBox={this.state.informationBox}
+                toggleSidebar={this.props.toggleSidebar}
+                />
                 <div className="map-container">
                     <div id="map" role="application"/>
                 </div>
-            </div>
+            </main>
         );
     }
 }
