@@ -8,13 +8,14 @@
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
     "react-scripts": "2.0.5",
-	"cra-append-sw": "^2.1.0"
+    "cra-append-sw": "^2.1.0"
   },
   "scripts": {
     "start": "react-scripts start && cra-append-sw --mode dev ./src/service-worker.js",
     "build": "react-scripts build && cra-append-sw ./src/service-worker.js",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+	"deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -25,5 +26,7 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "devDependencies": {}
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
+  }
 }
