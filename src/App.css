@@ -36,7 +36,7 @@ h1, h2, h3, h4, h5{
     position: fixed;
     display: flex;
     justify-content: center;
-    background-color: #ef8e2d;
+    background-color: #D15E11;
     bottom: 0;
     z-index: 4;
     overflow: hidden;
@@ -117,7 +117,7 @@ h1, h2, h3, h4, h5{
     overflow-x:hidden;
     padding-top:7px;
     transition:0.5s;
-    border-top: 5px solid #ef8e2d;
+    border-top: 5px solid #D15E11;
     box-shadow: 0px 5px 5px 1px rgba(0,0,0,0.4);
 }
 .showSidebar{
@@ -171,12 +171,12 @@ h1, h2, h3, h4, h5{
     transition: border 0.3s ease-out;
  }
  .location-list li:hover{
-    border-left: 5px solid #ef8e2d;
+    border-left: 5px solid #D15E11;
     transition: border 0.3s ease;
     font-weight: bold;
  }
  .location-list li.active{
-    border-left: 5px solid #ef8e2d;
+    border-left: 5px solid #D15E11;
  }
 
  /*

@@ -27,6 +27,9 @@ class Item extends Component{
         }, 800);
         informationBox.open(map, marker);
         window.google.maps.event.addListener(informationBox, 'domready', function(){
+            //Set Alt Tag for InfoWindow Close
+            $('button.gm-ui-hover-effect img').attr('alt','close');
+            //trap the focus inside infowWindow
             let tabbableItem = $('.location-list li.active');
             let firstTabbable = $('.informationBox');
             let lastTabbable = $('button.gm-ui-hover-effect');
@@ -44,6 +47,8 @@ class Item extends Component{
                     lastTabbable.focus();
                 }
             });
+            //return the focus to side bar active menu
+            // and close the InfoWindow on enter
             lastTabbable.keydown(function(e){
                 if (e.which === 13) {
                     e.preventDefault();

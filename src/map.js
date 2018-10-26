@@ -93,7 +93,11 @@ class Map extends Component {
                 </div>
                 </div>`);
             this.state.informationBox.open(map, marker);
+
             window.google.maps.event.addListener(this.state.informationBox, 'domready', function(){
+                //Set Alt Tag for InfoWindow Close Button
+                $('button.gm-ui-hover-effect img').attr('alt','close');
+                //trap the focus inside infowWindow
                 let firstTabbable = $('.informationBox');
                 let lastTabbable = $('button.gm-ui-hover-effect');
                 lastTabbable.attr('tabIndex','1');
@@ -110,6 +114,7 @@ class Map extends Component {
                         lastTabbable.focus();
                     }
                 });
+                //close the InfoWindow on enter
                 lastTabbable.keydown(function(e){
                     if (e.which === 13) {
                         e.preventDefault();
