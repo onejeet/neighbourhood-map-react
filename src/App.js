@@ -16,11 +16,9 @@ class App extends Component {
                 return false;
             }
         });
-        //$("img[src*='logo']")[0]
     }
 
     focusTrap = () => {
-        //const {sidebar} = this.state;
         if(this.state.sidebar === 'closed'){
             //alert('Sidebar Trap Started');
             let firstTabbable = $('#hamburger-icon');

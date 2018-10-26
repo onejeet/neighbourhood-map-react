@@ -145,7 +145,6 @@ class Map extends Component {
                 marker.setVisible(false);
             }
         });
-
         this.setState({markers});
     };
 

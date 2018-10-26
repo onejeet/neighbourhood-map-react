@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 
-
-
 class Item extends Component{
 
     //open marker function opens the marker when clicked on listItem
