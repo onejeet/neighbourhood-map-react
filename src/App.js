@@ -10,24 +10,49 @@ class App extends Component {
 
     componentDidMount(){
         //Add Interactivity for Enter Key to improve a11y
-        $('#hamburger-icon').keypress(function(event) {
+        $('#hamburger-icon').keydown(function(event) {
             if (event.which === 13) {
                 $(event.target).click();
                 return false;
             }
         });
+        //$("img[src*='logo']")[0]
     }
+
+    focusTrap = () => {
+        //const {sidebar} = this.state;
+        if(this.state.sidebar === 'closed'){
+            //alert('Sidebar Trap Started');
+            let firstTabbable = $('#hamburger-icon');
+            let lastTabbable = $('.location-list li:last-child');
+            lastTabbable.keydown(function(e){
+                if ((e.which === 9 && !e.shiftKey)) {
+                    e.preventDefault();
+                    firstTabbable.focus();
+                }
+            });
+            firstTabbable.keydown(function(e){
+                if ((e.which === 9 && e.shiftKey)) {
+                    console.log('Hello');
+                    e.preventDefault();
+                    lastTabbable.focus();
+                }
+            });
+        }
+   }
 
     toggleSidebar = () => {
         //Open and close sidebar function
         if(this.state.sidebar === 'open'){
-            $('.sidebar').removeClass('showSidebar');
             this.setState({sidebar: 'closed'});
+            $('.sidebar').removeClass('showSidebar');
             $('#hamburger-icon').removeClass("change");
+            $('#hamburger-icon').attr('aria-label','Open Sidebar Menu');
         }else{
+            this.setState({sidebar: 'open'}, this.focusTrap());
             $('.sidebar').addClass('showSidebar');
-            this.setState({sidebar: 'open'});
             $('#hamburger-icon').addClass("change");
+            $('#hamburger-icon').attr('aria-label','Close Sidebar Menu');
         }
     }
 
@@ -37,12 +62,12 @@ class App extends Component {
                 <header className="header">
                     <div className="logo">Hyderabad Malls</div>
                 </header>
-                <div id="hamburger-icon" tabIndex="0" onClick={this.toggleSidebar}>
+                <div id="hamburger-icon" tabIndex="0" aria-label="Open Sidebar Menu" onClick={this.toggleSidebar}>
                     <div className="bar1"></div>
                     <div className="bar2"></div>
                     <div className="bar3"></div>
                 </div>
-                <Map google={this.props.google} tabIndex="-1" toggleSidebar={this.toggleSidebar} />
+                <Map google={this.props.google} toggleSidebar={this.toggleSidebar} />
             </div>
         );
     }

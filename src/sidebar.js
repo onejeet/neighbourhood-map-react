@@ -6,7 +6,7 @@ class Sidebar extends Component {
     render(){
         const {map,informationBox} = this.props;
         return (
-            <div className="sidebar">
+            <div className="sidebar" aria-label="Sidebar Menu" aria-modal="true">
                 <label htmlFor="search">Enter the Mall Name</label>
                 <input id="search" tabIndex="0" aria-label="Search Malls"  placeholder="Search Malls"
                 value={this.props.query}

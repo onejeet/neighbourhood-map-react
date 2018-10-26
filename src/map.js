@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Locations } from './locations.js';
 import escapeRegExp from 'escape-string-regexp';
 import Sidebar from './sidebar.js';
+import $ from 'jquery';
 
 class Map extends Component {
     state = {
@@ -35,8 +36,8 @@ class Map extends Component {
         const {tips} = this.state
         this.state.allPlaces.forEach(place => {
 
-        const clientId = "CWQ3TXXBMMD30Y5OX4O3XMW1PWD1XBAI5DQISABAH2D2RVDL";
-        const clientSecret = "IU40MZ3LYRZC1MU431LJCYO1BZDFAMJ1OZNZYCM0F3FOY35W";
+        const clientId = "SBUBZ2B234WUQ5CKSPQXFPRDMFVCGFGQ1PA25VGNLFRZTPV0";
+        const clientSecret = "HSLONZVWRKJF5TMQ2UUTA23EAO4MVINSOLD1ZCYFKXYWR2YH";
         const url = `https://api.foursquare.com/v2/venues/${place.venue_id}/tips?&client_id=${clientId}&client_secret=${clientSecret}&v=20181024`
 
         //fetch data from foursquare
@@ -60,7 +61,7 @@ class Map extends Component {
 
     componentDidUpdate(){
         //add bounds
-        const {markers,map} = this.state
+        const {markers,map} = this.state;
         if (!map.loaded) {
         let bounds = new window.google.maps.LatLngBounds();
 
@@ -85,13 +86,37 @@ class Map extends Component {
         marker.addListener('click', () => {
             this.state.map.panTo(marker.getPosition());
             this.state.informationBox.setContent(`
-            <div class="informationBox" tabIndex="1">
-                <div name=${marker.title}>
-                    <h3 tabIndex="0">${marker.title}</h3>
-                    <p tabIndex="0">${marker.text}</p>
+            <div class="informationBox" tabIndex="1" aria-modal="true">
+                <div name="${marker.title}">
+                    <h3 tabIndex="1">${marker.title}</h3>
+                    <p tabIndex="1">${marker.text}</p>
                 </div>
                 </div>`);
             this.state.informationBox.open(map, marker);
+            window.google.maps.event.addListener(this.state.informationBox, 'domready', function(){
+                let firstTabbable = $('.informationBox');
+                let lastTabbable = $('button.gm-ui-hover-effect');
+                lastTabbable.attr('tabIndex','1');
+                firstTabbable.focus();
+                lastTabbable.keydown(function(e){
+                    if ((e.which === 9 && !e.shiftKey)) {
+                        e.preventDefault();
+                        firstTabbable.focus();
+                    }
+                });
+                firstTabbable.keydown(function(e){
+                    if ((e.which === 9 && e.shiftKey)) {
+                        e.preventDefault();
+                        lastTabbable.focus();
+                    }
+                });
+                lastTabbable.keydown(function(e){
+                    if (e.which === 13) {
+                        e.preventDefault();
+                        lastTabbable.click();
+                    }
+                });
+            });
         });
         //animation marker bounce on mouseover
         marker.addListener('mouseover', function() {
