@@ -1,20 +1,29 @@
 self.addEventListener('fetch', function (e) {
-    if (e.request.url.indexOf('https://api.foursquare.com') == 0) {
-        // Put data handler code here
+if(e.request.url.indexOf('https://maps.googleapis.com') == 0 && navigator.onLine){
         fetch(e.request)
             .then(function (response) {
-                let cacheName = 'react-onejeet-project';
+                let cacheName = 'onejeet-react-app';
                 return caches.open(cacheName).then(function (cache) {
                     cache.put(e.request.url, response.clone());
-                    console.log('ServiceWorker Fetched & Cached Data');
+                    console.log('Google Maps Data Fetched & Cached');
                     return response;
                 });
             })
-    } else {
+    }else {
         e.respondWith(
-            caches.match(e.request).then(function (response) {
-                return response || fetch(e.request);
-            })
+          caches.match(e.request).then(response => {
+            if(response){
+                console.log('Serving '+e.request.url+' From Cache');
+                return response;
+            }
+            return fetch(e.request);
+          }).catch(error => {
+            return new Response('Not connected to the internet', {
+                headers:{
+                    'Content-Type':'text/html'
+                }
+            });
+          })
         );
     }
 });

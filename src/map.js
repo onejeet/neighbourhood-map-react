@@ -33,29 +33,50 @@ class Map extends Component {
     }
 
     loadPlacesData = () => {
-        const {tips} = this.state
-        this.state.allPlaces.forEach(place => {
+        const {tips,allPlaces} = this.state
+        var flag = true;
+        allPlaces.forEach(place => {
 
-        const clientId = "SBUBZ2B234WUQ5CKSPQXFPRDMFVCGFGQ1PA25VGNLFRZTPV0";
-        const clientSecret = "HSLONZVWRKJF5TMQ2UUTA23EAO4MVINSOLD1ZCYFKXYWR2YH";
-        const url = `https://api.foursquare.com/v2/venues/${place.venue_id}/tips?&client_id=${clientId}&client_secret=${clientSecret}&v=20181024`
+        const clientId = "JOM235CWVCY4NL3D30035XZHM2P2PBN0CDZ34FRGX2X25WTK";
+        const clientSecret = "0TFK5GIHLWAVRNJ0KLOFIVCCAMK2ZACQBDIPP4NEDMK0VZXH";
+        const url = `https://api.foursquare.com/v2/venues/${place.venue_id}/tips?&client_id=${clientId}&client_secret=${clientSecret}&v=20181026`;
+        // Add URLs to the cache
 
         //fetch data from foursquare
         fetch(url)
         .then((response) => {
+            let response2 = response.clone();
             response.json().then((data) => {
             let tip
             // handle Errors
             if (response.status === 200) {
-                tip = {text: data.response.tips.items[0].text, name: place.name, position: place.position}
+                if(data.response.tips.items[0]){
+                    tip = {text: data.response.tips.items[0].text, name: place.name, position: place.position, feedback: (data.response.tips.count) ? data.response.tips.count : 'No Data Fetched'}
+                }
+                else{
+                    tip = {text: 'No user feedback available', name: place.name, position: place.position,feedback: 0}
+                }
             } else {
-                tip = {text:"Unable to retrieve data from Foursquare", name: place.name, position: place.position}
+                tip = {text:"Sorry, Unable to retrieve data from Foursquare", name: place.name, position: place.position}
             }
             tips.push(tip);
             this.setState(tips);
             this.addMarker(this.state.map, tip);
         })
-        }).catch(error =>alert(`Unable to retrieve data from Foursquare. Try again later.`, error));
+        return response2;
+        })
+        .then(function (res) {
+            let cacheName = 'onejeet-react-app';
+            return caches.open(cacheName).then(function (cache) {
+                cache.put(url, res);
+                console.log('FourSquare Data Fetched & Cached');
+            });
+        }).catch(() => {
+            if(flag){
+                alert(`Sorry, Unable to retrieve data from Foursquare. Please try again later.`);
+            }
+            flag = false;
+            })
         })
     }
 
@@ -80,6 +101,7 @@ class Map extends Component {
             map,
             text: place.text,
             title: place.name,
+            feedback: place.feedback,
             animation: window.google.maps.Animation.DROP,
         });
         //open informationBox content on marker click
@@ -90,6 +112,8 @@ class Map extends Component {
                 <div name="${marker.title}">
                     <h3 tabIndex="1">${marker.title}</h3>
                     <p tabIndex="1">${marker.text}</p>
+                    <p tabIndex="1">Total Feedbacks: ${marker.feedback}</p>
+                    <p tabIndex="1">Data is fetched from Foursquare.</p>
                 </div>
                 </div>`);
             this.state.informationBox.open(map, marker);

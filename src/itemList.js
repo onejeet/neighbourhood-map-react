@@ -11,11 +11,13 @@ class Item extends Component{
         }
         map.panTo(marker.getPosition());
         informationBox.setContent(
-            `<div id="infoBox" class="informationBox" tabIndex="1" aria-modal="true">
-            <div name="${ marker.title }">
-                <h3 tabIndex="1">${marker.title}</h3>
-                <p tabIndex="1">${marker.text}</p>
-            </div>
+            `<div class="informationBox" tabIndex="1" aria-modal="true">
+                <div name="${marker.title}">
+                    <h3 tabIndex="1">${marker.title}</h3>
+                    <p tabIndex="1">${marker.text}</p>
+                    <p tabIndex="1">Total Feedbacks: ${marker.feedback}</p>
+                    <p tabIndex="1">Data is fetched from Foursquare.</p>
+                </div>
             </div>`
         );
         //marker animation bounce when clicked on the listItem

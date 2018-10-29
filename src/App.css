@@ -184,11 +184,27 @@ h1, h2, h3, h4, h5{
   * Tooltip CSS
   * -------------
   */
- .informationBox{
-    padding: 15px;
- }
- .informationBox h3{
-    color: #000;
-    font-size: 18px;
-    font-weight: bold;
- }
+.informationBox{
+ font-family: 'Montserrat', sans-serif;
+ padding: 10px;
+}
+.informationBox div h3{
+ color: #000;
+ font-size: 18px;
+ font-weight: bold;
+ border-bottom: 2px solid #000;
+ margin-bottom: 10px;
+}
+.informationBox div p{
+ color: #000;
+ font-size: 14px;
+}
+.informationBox div p:nth-child(3){
+  margin-top: 5px;
+ font-weight: bold;
+}
+.informationBox div p:last-child{
+  margin-top: 10px;
+  font-size: 10px;
+  float: right;
+}
