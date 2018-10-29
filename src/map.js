@@ -25,6 +25,17 @@ class Map extends Component {
             center: {lat: 17.3924137, lng: 78.4653866},
             zoom:11,
         });
+
+        // Add Google Map Initial data to Cache
+        if(navigator.onLine){
+            navigator.serviceWorker.ready.then(function(registration){
+                let cacheName = 'onejeet-react-app';
+                return caches.open(cacheName).then(function (cache) {
+                    cache.add(map);
+                });
+            });
+        }
+
         const informationBox = new window.google.maps.InfoWindow({
             content: 'content'
         });
@@ -66,13 +77,15 @@ class Map extends Component {
         })
         //add urls to the cache
         .then(function (res) {
-            navigator.serviceWorker.ready.then(function(registration){
-                let cacheName = 'onejeet-react-app';
-                return caches.open(cacheName).then(function (cache) {
-                    cache.put(url, res);
-                    console.log('FourSquare Data Fetched & Cached');
+            if(navigator.onLine){
+                navigator.serviceWorker.ready.then(function(registration){
+                    let cacheName = 'onejeet-react-app';
+                    return caches.open(cacheName).then(function (cache) {
+                        cache.put(url, res);
+                        console.log('FourSquare Data Fetched & Cached');
+                    });
                 });
-            });
+            }
         }).catch(() => {
             if(flag){
                 alert(`Sorry, Unable to retrieve data from Foursquare. Please try again later.`);

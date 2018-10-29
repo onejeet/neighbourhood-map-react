@@ -31,7 +31,6 @@ class App extends Component {
             });
             firstTabbable.keydown(function(e){
                 if ((e.which === 9 && e.shiftKey)) {
-                    console.log('Hello');
                     e.preventDefault();
                     lastTabbable.focus();
                 }

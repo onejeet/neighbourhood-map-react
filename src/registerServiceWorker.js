@@ -51,6 +51,9 @@ function registerValidSW(swUrl) {
         const installingWorker = registration.installing;
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
+            caches.open('onejeet-react-app').then(cache => {
+                return cache.addAll(['/favicon.ico']);
+            });
             if (navigator.serviceWorker.controller) {
               // At this point, the old content will have been purged and
               // the fresh content will have been added to the cache.
