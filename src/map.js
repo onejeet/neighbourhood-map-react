@@ -66,10 +66,12 @@ class Map extends Component {
         })
         //add urls to the cache
         .then(function (res) {
-            let cacheName = 'onejeet-react-app';
-            return caches.open(cacheName).then(function (cache) {
-                cache.put(url, res);
-                console.log('FourSquare Data Fetched & Cached');
+            navigator.serviceWorker.ready.then(function(registration){
+                let cacheName = 'onejeet-react-app';
+                return caches.open(cacheName).then(function (cache) {
+                    cache.put(url, res);
+                    console.log('FourSquare Data Fetched & Cached');
+                });
             });
         }).catch(() => {
             if(flag){
