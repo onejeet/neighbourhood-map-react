@@ -40,7 +40,6 @@ class Map extends Component {
         const clientId = "JOM235CWVCY4NL3D30035XZHM2P2PBN0CDZ34FRGX2X25WTK";
         const clientSecret = "0TFK5GIHLWAVRNJ0KLOFIVCCAMK2ZACQBDIPP4NEDMK0VZXH";
         const url = `https://api.foursquare.com/v2/venues/${place.venue_id}/tips?&client_id=${clientId}&client_secret=${clientSecret}&v=20181026`;
-        // Add URLs to the cache
 
         //fetch data from foursquare
         fetch(url)
@@ -51,13 +50,13 @@ class Map extends Component {
             // handle Errors
             if (response.status === 200) {
                 if(data.response.tips.items[0]){
-                    tip = {text: data.response.tips.items[0].text, name: place.name, position: place.position, feedback: (data.response.tips.count) ? data.response.tips.count : 'No Data Fetched'}
+                    tip = {text: data.response.tips.items[0].text, name: place.name, position: place.position, feedback: data.response.tips.count}
                 }
                 else{
                     tip = {text: 'No user feedback available', name: place.name, position: place.position,feedback: 0}
                 }
             } else {
-                tip = {text:"Sorry, Unable to retrieve data from Foursquare", name: place.name, position: place.position}
+                tip = {text:"Sorry, Unable to retrieve data from Foursquare", name: place.name, position: place.position, feedback:'No Data Fetched'}
             }
             tips.push(tip);
             this.setState(tips);
@@ -65,6 +64,7 @@ class Map extends Component {
         })
         return response2;
         })
+        //add urls to the cache
         .then(function (res) {
             let cacheName = 'onejeet-react-app';
             return caches.open(cacheName).then(function (cache) {

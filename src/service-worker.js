@@ -13,7 +13,6 @@ if(e.request.url.indexOf('https://maps.googleapis.com') == 0 && navigator.onLine
         e.respondWith(
           caches.match(e.request).then(response => {
             if(response){
-                console.log('Serving '+e.request.url+' From Cache');
                 return response;
             }
             return fetch(e.request);
