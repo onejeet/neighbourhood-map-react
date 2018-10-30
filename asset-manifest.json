@@ -1,13 +1,13 @@
 {
-  "main.css": "/static/css/main.d0a2c660.chunk.css",
-  "main.js": "/static/js/main.3908b8e1.chunk.js",
-  "main.js.map": "/static/js/main.3908b8e1.chunk.js.map",
-  "static/js/1.aeaf817e.chunk.js": "/static/js/1.aeaf817e.chunk.js",
-  "static/js/1.aeaf817e.chunk.js.map": "/static/js/1.aeaf817e.chunk.js.map",
-  "runtime~main.js": "/static/js/runtime~main.229c360f.js",
-  "runtime~main.js.map": "/static/js/runtime~main.229c360f.js.map",
-  "static/css/main.d0a2c660.chunk.css.map": "/static/css/main.d0a2c660.chunk.css.map",
-  "index.html": "/index.html",
-  "precache-manifest.5897b2e3e134d4ed3c7b260b580b6526.js": "/precache-manifest.5897b2e3e134d4ed3c7b260b580b6526.js",
-  "service-worker.js": "/service-worker.js"
+  "main.css": "/react-neighbourhood-map/static/css/main.77e8aaf3.chunk.css",
+  "main.js": "/react-neighbourhood-map/static/js/main.0e99fec4.chunk.js",
+  "main.js.map": "/react-neighbourhood-map/static/js/main.0e99fec4.chunk.js.map",
+  "static/js/1.7ae2a8a7.chunk.js": "/react-neighbourhood-map/static/js/1.7ae2a8a7.chunk.js",
+  "static/js/1.7ae2a8a7.chunk.js.map": "/react-neighbourhood-map/static/js/1.7ae2a8a7.chunk.js.map",
+  "runtime~main.js": "/react-neighbourhood-map/static/js/runtime~main.0ddfe0be.js",
+  "runtime~main.js.map": "/react-neighbourhood-map/static/js/runtime~main.0ddfe0be.js.map",
+  "static/css/main.77e8aaf3.chunk.css.map": "/react-neighbourhood-map/static/css/main.77e8aaf3.chunk.css.map",
+  "index.html": "/react-neighbourhood-map/index.html",
+  "precache-manifest.b327681329230cdeef5c440570074bba.js": "/react-neighbourhood-map/precache-manifest.b327681329230cdeef5c440570074bba.js",
+  "service-worker.js": "/react-neighbourhood-map/service-worker.js"
 }
