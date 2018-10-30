@@ -24,7 +24,7 @@ A single-page web application, built using the Reactjs. It displays a Google Map
 
 A new browser window open automatically in your browser displaying the app.  If it doesn't, navigate to [http://localhost:3000/](http://localhost:3000/) in your browser
 
-**NOTE: The service workers installs in Development mode as well but caches the app only when it is in production mode. Checkout Live version [Here](https://onejeet.github.io/react-neighbourhood-map)**
+**NOTE: The service workers installs and caches the app only when it is in production mode. Checkout Live version [Here](https://onejeet.github.io/react-neighbourhood-map)**
 
 ## How to run the project in Production Mode
 
