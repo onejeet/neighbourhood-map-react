@@ -75,16 +75,15 @@ class Map extends Component {
                 navigator.serviceWorker.ready.then(function(registration){
                     let cacheName = 'onejeet-react-app';
                     return caches.open(cacheName).then(function (cache) {
-                        cache.put(url, res);
                         console.log('FourSquare Data Fetched & Cached');
+                        return cache.put(url, res);
                     });
                 });
             }
         })
         .catch(() => {
-                // do something
+                alert("Sorry, Unable to retrieve data from Foursquare");
         })
-        //this.infoBoxData(marker,tip);
     }
 
     loadMarkersData = (place,marker) => {
