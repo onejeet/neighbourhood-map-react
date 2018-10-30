@@ -16,7 +16,7 @@ class Map extends Component {
 
     componentDidMount(){
         window.initMap = this.initMap;
-        loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyB-Qm2gTBeiX0PiY14ijGy8JZ_s5S-OQH4&callback=initMap')
+        loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyB-Qm2gTBeiX0PiY14ijGy8JZ_s5S-OQH4&callback=initMap');
     }
 
     initMap = () => {
@@ -26,27 +26,24 @@ class Map extends Component {
             zoom:11,
         });
 
-        // Add Google Map Initial data to Cache
-        if(navigator.onLine){
-            navigator.serviceWorker.ready.then(function(registration){
-                let cacheName = 'onejeet-react-app';
-                return caches.open(cacheName).then(function (cache) {
-                    cache.add(map);
-                });
-            });
-        }
-
         const informationBox = new window.google.maps.InfoWindow({
             content: 'content'
         });
         this.setState({map, informationBox});
-        this.loadPlacesData();
+        this.loadMarkers();
     }
 
-    loadPlacesData = () => {
-        const {tips,allPlaces} = this.state
-        var flag = true;
-        allPlaces.forEach(place => {
+    loadMarkers = () => {
+        const {allPlaces} = this.state;
+        allPlaces.forEach((place) => {
+            let marker = this.addMarker(this.state.map, place);
+            this.loadData(place, marker);
+        });
+    }
+
+    loadData = (place, marker) => {
+        const {tips} = this.state;
+        let tip;
 
         const clientId = "JOM235CWVCY4NL3D30035XZHM2P2PBN0CDZ34FRGX2X25WTK";
         const clientSecret = "0TFK5GIHLWAVRNJ0KLOFIVCCAMK2ZACQBDIPP4NEDMK0VZXH";
@@ -57,7 +54,6 @@ class Map extends Component {
         .then((response) => {
             let response2 = response.clone();
             response.json().then((data) => {
-            let tip
             // handle Errors
             if (response.status === 200) {
                 if(data.response.tips.items[0]){
@@ -71,12 +67,10 @@ class Map extends Component {
             }
             tips.push(tip);
             this.setState(tips);
-            this.addMarker(this.state.map, tip);
-        })
-        return response2;
-        })
-        //add urls to the cache
-        .then(function (res) {
+            this.loadMarkersData(tip, marker);
+            })
+            return response2;
+        }).then(function(res){
             if(navigator.onLine){
                 navigator.serviceWorker.ready.then(function(registration){
                     let cacheName = 'onejeet-react-app';
@@ -86,13 +80,17 @@ class Map extends Component {
                     });
                 });
             }
-        }).catch(() => {
-            if(flag){
-                alert(`Sorry, Unable to retrieve data from Foursquare. Please try again later.`);
-            }
-            flag = false;
-            })
         })
+        .catch(() => {
+                // do something
+        })
+        //this.infoBoxData(marker,tip);
+    }
+
+    loadMarkersData = (place,marker) => {
+        marker.name = place.name;
+        marker.text = place.text;
+        marker.feedback = place.feedback;
     }
 
     componentDidUpdate(){
@@ -107,6 +105,50 @@ class Map extends Component {
         }
     }
 
+    openInfoBox = (marker) => {
+        const {map} = this.state;
+        this.state.informationBox.setContent(`
+        <div class="informationBox" tabIndex="1" aria-modal="true" aria-label="${marker.name} Information Window">
+            <div name="${marker.name}">
+                <h3 tabIndex="1">${marker.name}</h3>
+                <p tabIndex="1">${marker.text}</p>
+                <p tabIndex="1">Total Feedbacks: ${marker.feedback}</p>
+                <p tabIndex="-1">Data is fetched from Foursquare.</p>
+            </div>
+            </div>`);
+        this.state.map.panTo(marker.getPosition());
+        this.state.informationBox.open(map, marker);
+        window.google.maps.event.addListener(this.state.informationBox, 'domready', function(){
+            //Set Alt Tag for InfoWindow Close Button
+            $('button.gm-ui-hover-effect img').attr('alt','close');
+            //trap the focus inside infowWindow
+            let firstTabbable = $('.informationBox');
+            let lastTabbable = $('button.gm-ui-hover-effect');
+            lastTabbable.attr('tabIndex','1');
+            firstTabbable.focus();
+            lastTabbable.keydown(function(e){
+                if ((e.which === 9 && !e.shiftKey)) {
+                    e.preventDefault();
+                    firstTabbable.focus();
+                }
+            });
+            firstTabbable.keydown(function(e){
+                if ((e.which === 9 && e.shiftKey)) {
+                    e.preventDefault();
+                    lastTabbable.focus();
+                }
+            });
+            //close the InfoWindow on enter
+            lastTabbable.keydown(function(e){
+                if (e.which === 13) {
+                    e.preventDefault();
+                    lastTabbable.click();
+                    $('.location-list li.active').focus();
+                }
+            });
+        });
+    }
+
     addMarker = (map, place) => {
         const {markers} = this.state;
         //add marker
@@ -114,53 +156,14 @@ class Map extends Component {
         const marker = new window.google.maps.Marker({
             position: {lat: place.position.lat, lng: place.position.lng},
             map,
-            text: place.text,
-            title: place.name,
-            feedback: place.feedback,
+            name:place.name,
             animation: window.google.maps.Animation.DROP,
         });
         //open informationBox content on marker click
         marker.addListener('click', () => {
-            this.state.map.panTo(marker.getPosition());
-            this.state.informationBox.setContent(`
-            <div class="informationBox" tabIndex="1" aria-modal="true">
-                <div name="${marker.title}">
-                    <h3 tabIndex="1">${marker.title}</h3>
-                    <p tabIndex="1">${marker.text}</p>
-                    <p tabIndex="1">Total Feedbacks: ${marker.feedback}</p>
-                    <p tabIndex="1">Data is fetched from Foursquare.</p>
-                </div>
-                </div>`);
-            this.state.informationBox.open(map, marker);
-
-            window.google.maps.event.addListener(this.state.informationBox, 'domready', function(){
-                //Set Alt Tag for InfoWindow Close Button
-                $('button.gm-ui-hover-effect img').attr('alt','close');
-                //trap the focus inside infowWindow
-                let firstTabbable = $('.informationBox');
-                let lastTabbable = $('button.gm-ui-hover-effect');
-                lastTabbable.attr('tabIndex','1');
-                firstTabbable.focus();
-                lastTabbable.keydown(function(e){
-                    if ((e.which === 9 && !e.shiftKey)) {
-                        e.preventDefault();
-                        firstTabbable.focus();
-                    }
-                });
-                firstTabbable.keydown(function(e){
-                    if ((e.which === 9 && e.shiftKey)) {
-                        e.preventDefault();
-                        lastTabbable.focus();
-                    }
-                });
-                //close the InfoWindow on enter
-                lastTabbable.keydown(function(e){
-                    if (e.which === 13) {
-                        e.preventDefault();
-                        lastTabbable.click();
-                    }
-                });
-            });
+            this.setState({currentPlace:place});
+            this.state.informationBox.setContent('Loading Data...');
+            this.openInfoBox(marker);
         });
         //animation marker bounce on mouseover
         marker.addListener('mouseover', function() {
@@ -169,15 +172,16 @@ class Map extends Component {
         });
         markers.push(marker)
         this.setState({markers})
+        return marker;
     }
     }
 
     updateResult = (query, map) => {
         this.setState({query: query})
-        const {markers} = this.state
+        const {markers} = this.state;
         //filter markers
         markers.forEach((marker) => {
-            if (marker.title.toLowerCase().indexOf(query.toLowerCase()) >= 0){
+            if (marker.name.toLowerCase().indexOf(query.toLowerCase()) >= 0){
                 marker.setVisible(true);
                 this.state.informationBox.close(map, marker);
             } else {
@@ -191,7 +195,7 @@ class Map extends Component {
         let newPlaces;
         if (query){
             const match = new RegExp(escapeRegExp(query),'i');
-            newPlaces = markers.filter((marker)=>match.test(marker.title))
+            newPlaces = markers.filter((marker)=>match.test(marker.name))
         }
         else{
           newPlaces=markers;
@@ -200,8 +204,7 @@ class Map extends Component {
     }
 
     render() {
-        const {query} = this.state;
-        const {markers} = this.state
+        const {query,markers} = this.state;
         let searchedPlaces = this.filterPlaces(query, markers);
         return (
             <main className="container" role="main">
@@ -211,8 +214,9 @@ class Map extends Component {
                 map={this.state.map}
                 searchedPlaces={searchedPlaces}
                 marker={this.state.markers}
-                informationBox={this.state.informationBox}
+                tips = {this.state.tips}
                 toggleSidebar={this.props.toggleSidebar}
+                openInfoBox = {this.openInfoBox}
                 />
                 <div className="map-container" tabIndex="-1">
                     <div id="map" role="application"/>

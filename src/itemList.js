@@ -3,62 +3,6 @@ import $ from 'jquery';
 
 class Item extends Component{
 
-    //open marker function opens the marker when clicked on listItem
-    openMarker = () => {
-        const {map, informationBox, marker, toggleSidebar} = this.props;
-        if(window.innerWidth <= 991){
-            toggleSidebar();
-        }
-        map.panTo(marker.getPosition());
-        informationBox.setContent(
-            `<div class="informationBox" tabIndex="1" aria-modal="true">
-                <div name="${marker.title}">
-                    <h3 tabIndex="1">${marker.title}</h3>
-                    <p tabIndex="1">${marker.text}</p>
-                    <p tabIndex="1">Total Feedbacks: ${marker.feedback}</p>
-                    <p tabIndex="1">Data is fetched from Foursquare.</p>
-                </div>
-            </div>`
-        );
-        //marker animation bounce when clicked on the listItem
-        marker.setAnimation(window.google.maps.Animation.BOUNCE);
-        setTimeout(() => {
-            marker.setAnimation(null)
-        }, 800);
-        informationBox.open(map, marker);
-        window.google.maps.event.addListener(informationBox, 'domready', function(){
-            //Set Alt Tag for InfoWindow Close
-            $('button.gm-ui-hover-effect img').attr('alt','close');
-            //trap the focus inside infowWindow
-            let tabbableItem = $('.location-list li.active');
-            let firstTabbable = $('.informationBox');
-            let lastTabbable = $('button.gm-ui-hover-effect');
-            lastTabbable.attr('tabIndex','1');
-            firstTabbable.focus();
-            lastTabbable.keydown(function(e){
-                if ((e.which === 9 && !e.shiftKey)) {
-                    e.preventDefault();
-                    firstTabbable.focus();
-                }
-            });
-            firstTabbable.keydown(function(e){
-                if ((e.which === 9 && e.shiftKey)) {
-                    e.preventDefault();
-                    lastTabbable.focus();
-                }
-            });
-            //return the focus to side bar active menu
-            // and close the InfoWindow on enter
-            lastTabbable.keydown(function(e){
-                if (e.which === 13) {
-                    e.preventDefault();
-                    lastTabbable.click();
-                    tabbableItem.focus();
-                }
-            });
-        });
-    }
-
     componentDidMount(){
         const {marker} = this.props;
         //add active class when listItem is click
@@ -81,7 +25,7 @@ class Item extends Component{
     render(){
         const {marker} = this.props;
         return(
-                <li tabIndex="0" role="button" onClick={this.openMarker}>{marker.title}</li>
+                <li tabIndex="0" role="button" onClick={() => this.props.openInfoBox(marker)}>{marker.name}</li>
         )
     }
 }

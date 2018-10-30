@@ -4,7 +4,7 @@ import './App.css';
 
 class Sidebar extends Component {
     render(){
-        const {map,informationBox} = this.props;
+        const {map} = this.props;
         return (
             <div className="sidebar" aria-label="Sidebar Navigation" aria-modal="true">
                 <label htmlFor="search">Enter the Mall Name</label>
@@ -15,11 +15,13 @@ class Sidebar extends Component {
                 <ul className="location-list">
                 {this.props.searchedPlaces.map((marker) => (
                     <Item
-                        key={marker.title} className=""
+                        key={marker.name}
+                        className=""
                         map={map}
                         marker={marker}
+                        tips = {this.props.tips}
                         toggleSidebar={this.props.toggleSidebar}
-                        informationBox={informationBox}/>
+                        openInfoBox = {this.props.openInfoBox}/>
                     ))}
                 </ul>
             </div>
