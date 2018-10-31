@@ -107,6 +107,10 @@ class Map extends Component {
         }else if(window.innerWidth > 991){
             prevStateSidebar = 'open';
         }
+        //Marker Animation
+        marker.setAnimation(window.google.maps.Animation.BOUNCE);
+        setTimeout(() => marker.setAnimation(null), 900);
+
         this.state.informationBox.setContent(`
         <div class="informationBox" tabIndex="1" aria-modal="true" aria-label="${marker.name} Information Window">
             <div name="${marker.name}">
@@ -229,12 +233,14 @@ class Map extends Component {
         );
     }
 }
-
 function loadScript(url) {
-    var newScript = document.createElement("script");
-    // newScript.onerror = alert('Google Map Not Loaded!');
-    document.head.appendChild(newScript);
+    let newScript = document.createElement("script");
     newScript.src = url;
     newScript.async = true;
+    document.head.appendChild(newScript);
+    newScript.onerror = function(){
+        alert('Sorry, Unable to load Google Maps.');
+    };
 }
+
 export default Map;
