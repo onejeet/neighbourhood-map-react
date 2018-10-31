@@ -10,10 +10,16 @@ class App extends Component {
 
     componentDidMount(){
         //Add Interactivity for Enter Key to improve a11y
-        $('#hamburger-icon').keydown(function(event) {
+        $('#hamburger-icon').keydown((event) => {
             if (event.which === 13) {
                 $(event.target).click();
                 return false;
+            }
+        });
+        // ESC key closes the sidebar
+        $('.sidebar').keydown((e) => {
+            if (e.which == 27 && this.state.sidebar === 'open'){
+                this.toggleSidebar();
             }
         });
     }
@@ -64,7 +70,7 @@ class App extends Component {
                     <div className="bar2"></div>
                     <div className="bar3"></div>
                 </div>
-                <Map google={this.props.google} toggleSidebar={this.toggleSidebar} />
+                <Map google={this.props.google} toggleSidebar={this.toggleSidebar} sidebar = {this.state.sidebar}/>
             </div>
         );
     }

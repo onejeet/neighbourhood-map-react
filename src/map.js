@@ -44,6 +44,7 @@ class Map extends Component {
     loadData = (place, marker) => {
         const {tips} = this.state;
         let tip;
+        let self = this;
 
         const clientId = "JOM235CWVCY4NL3D30035XZHM2P2PBN0CDZ34FRGX2X25WTK";
         const clientSecret = "0TFK5GIHLWAVRNJ0KLOFIVCCAMK2ZACQBDIPP4NEDMK0VZXH";
@@ -52,7 +53,6 @@ class Map extends Component {
         //fetch data from foursquare
         fetch(url)
         .then((response) => {
-            let response2 = response.clone();
             response.json().then((data) => {
             // handle Errors
             if (response.status === 200) {
@@ -66,27 +66,19 @@ class Map extends Component {
                 tip = {text:"Sorry, Unable to retrieve data from Foursquare", name: place.name, position: place.position, feedback:'No Data Fetched'}
             }
             tips.push(tip);
-            this.setState(tips);
-            this.loadMarkersData(tip, marker);
+            self.setState(tips);
+            self.loadMarkersData(tip, marker);
+            }).catch(function(error){
+                tip = {text:"Sorry, Unable to retrieve data from Foursquare", name: place.name, position: place.position, feedback:'No Data Fetched'}
+                self.loadMarkersData(tip, marker);
             })
-            return response2;
-        }).then(function(res){
-            if(navigator.onLine){
-                navigator.serviceWorker.ready.then(function(registration){
-                    let cacheName = 'onejeet-react-app';
-                    return caches.open(cacheName).then(function (cache) {
-                        console.log('FourSquare Data Fetched & Cached');
-                        return cache.put(url, res);
-                    });
-                });
-            }
-        })
-        .catch(() => {
-                alert("Sorry, Unable to retrieve data from Foursquare");
+        }).catch((error) => {
+                tip = {text:"Sorry, Unable to retrieve data from Foursquare", name: place.name, position: place.position, feedback:'No Data Fetched'}
+                self.loadMarkersData(tip, marker);
         })
     }
 
-    loadMarkersData = (place,marker) => {
+    loadMarkersData = (place, marker) => {
         marker.name = place.name;
         marker.text = place.text;
         marker.feedback = place.feedback;
@@ -106,6 +98,15 @@ class Map extends Component {
 
     openInfoBox = (marker) => {
         const {map} = this.state;
+        // to close sidebar if a item is clicked on smaller screen
+        // for better visibility
+        let prevStateSidebar;
+        if(window.innerWidth <= 991 && this.props.sidebar === 'open'){
+            this.props.toggleSidebar();
+            prevStateSidebar = 'open';
+        }else if(window.innerWidth > 991){
+            prevStateSidebar = 'open';
+        }
         this.state.informationBox.setContent(`
         <div class="informationBox" tabIndex="1" aria-modal="true" aria-label="${marker.name} Information Window">
             <div name="${marker.name}">
@@ -117,6 +118,7 @@ class Map extends Component {
             </div>`);
         this.state.map.panTo(marker.getPosition());
         this.state.informationBox.open(map, marker);
+        const self = this;
         window.google.maps.event.addListener(this.state.informationBox, 'domready', function(){
             //Set Alt Tag for InfoWindow Close Button
             $('button.gm-ui-hover-effect img').attr('alt','close');
@@ -137,12 +139,15 @@ class Map extends Component {
                     lastTabbable.focus();
                 }
             });
-            //close the InfoWindow on enter
+            //close the InfoWindow and open side if width<991px on enter
             lastTabbable.keydown(function(e){
-                if (e.which === 13) {
+                if ((e.which === 13) && prevStateSidebar === 'open') {
                     e.preventDefault();
                     lastTabbable.click();
                     $('.location-list li.active').focus();
+                    if(window.innerWidth <= 991 && self.props.sidebar === 'closed'){
+                        self.props.toggleSidebar();
+                    }
                 }
             });
         });

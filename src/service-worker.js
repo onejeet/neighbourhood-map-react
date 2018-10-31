@@ -1,11 +1,11 @@
 self.addEventListener('fetch', function (e) {
-if(e.request.url.indexOf('https://maps.googleapis.com') == 0 && navigator.onLine){
+if((e.request.url.indexOf('https://api.foursquare.com') == 0 ||
+    e.request.url.indexOf('https://maps.googleapis.com') == 0) && navigator.onLine){
         fetch(e.request)
             .then(function (response) {
                 let cacheName = 'onejeet-react-app';
                 return caches.open(cacheName).then(function (cache) {
                     cache.put(e.request.url, response.clone());
-                    console.log('Google Maps Data Fetched & Cached');
                     return response;
                 });
             })
