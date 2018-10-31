@@ -18,7 +18,7 @@ class App extends Component {
         });
         // ESC key closes the sidebar
         $('.sidebar').keydown((e) => {
-            if (e.which == 27 && this.state.sidebar === 'open'){
+            if (e.which === 27 && this.state.sidebar === 'open'){
                 this.toggleSidebar();
             }
         });
